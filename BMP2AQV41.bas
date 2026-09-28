@@ -3,6 +3,7 @@
 
 #include once "windows.bi"
 #include "fbgfx.bi"
+#include once "aq_output.bi"
 
 DECLARE SUB start_program()
 
@@ -48,9 +49,8 @@ DIM SHARED image(320, 192) AS INTEGER, apal(15, 3) AS INTEGER, imz(320, 192, 3) 
 DIM SHARED imgload(320 * 192) AS INTEGER, charmap(255, 7, 7) AS INTEGER, matches(511) AS INTEGER, imagein(319, 191, 3) AS INTEGER, imout(319, 191) AS INTEGER
 DIM SHARED ret AS STRING
 DIM SHARED graphchar(255) AS INTEGER
-DIM SHARED OUTPSTR AS STRING
 DIM SHARED filename$, SAVENAME$, cs$, dt$, A$, head$, lbh$, lin$
-DIM SHARED lbj AS INTEGER, yostop AS INTEGER, dither AS INTEGER, OUT1 AS INTEGER, OUT2 AS INTEGER, LCOUNT AS INTEGER, OUTCOUNT AS INTEGER, LINENUM AS INTEGER, countme AS INTEGER, x AS INTEGER, y AS INTEGER, i AS INTEGER, j AS INTEGER, row AS INTEGER, MAXI AS INTEGER, SEC AS INTEGER, S AS INTEGER, V AS INTEGER, F AS INTEGER, o AS INTEGER, d AS INTEGER, mmatch AS INTEGER, temp AS INTEGER, outtem AS INTEGER, b AS INTEGER, ipos AS INTEGER, xpos AS INTEGER, ypos AS INTEGER, xsizebmp AS INTEGER, ysizebmp AS INTEGER, rdist AS SINGLE, gdist AS SINGLE, bdist AS SINGLE, c AS INTEGER, count AS INTEGER, xx AS INTEGER, yy AS INTEGER, fcount AS INTEGER, hcount AS INTEGER, code AS INTEGER, TOGGLE AS INTEGER
+DIM SHARED lbj AS INTEGER, yostop AS INTEGER, dither AS INTEGER, LINENUM AS INTEGER, countme AS INTEGER, x AS INTEGER, y AS INTEGER, i AS INTEGER, j AS INTEGER, row AS INTEGER, MAXI AS INTEGER, SEC AS INTEGER, S AS INTEGER, V AS INTEGER, F AS INTEGER, o AS INTEGER, d AS INTEGER, mmatch AS INTEGER, temp AS INTEGER, outtem AS INTEGER, b AS INTEGER, ipos AS INTEGER, xpos AS INTEGER, ypos AS INTEGER, xsizebmp AS INTEGER, ysizebmp AS INTEGER, rdist AS SINGLE, gdist AS SINGLE, bdist AS SINGLE, c AS INTEGER, count AS INTEGER, xx AS INTEGER, yy AS INTEGER, fcount AS INTEGER, hcount AS INTEGER, code AS INTEGER, TOGGLE AS INTEGER
 
 Screenres 700,500,32: CLS
 LOCATE 1, 1
@@ -453,116 +453,9 @@ LOCATE 27, 1: PRINT "Transposing..."
    LOCATE 28, 1: PRINT "Run Length Encoding..."
 
    LINENUM = 30
-   LCOUNT = 1
-   OUTCOUNT = 1
-   X = 1
-   PRINT #2, STR$(LINENUM); " DATA ";
-   LINENUM = 31
-
-REP:
-   A$ = INKEY$: IF A$ <> "" THEN END
-  
-   IF OUTCOUNT = 10 THEN PRINT #2, STR$(LINENUM); " DATA "; : OUTCOUNT = 1: LINENUM = LINENUM + 1
-  
-   IF X = 960 THEN PRINT #2, STR$(OUT1); ","; STR$(LCOUNT); ","; : GOTO FORE
-
-   OUT1 = FOUTCHAR(X)
-   OUT2 = FOUTCHAR(X + 1)
-  
-   IF OUT2 = OUT1 THEN LCOUNT = LCOUNT + 1: X = X + 1: GOTO REP
-   IF OUT2 <> OUT1 THEN LOCATE 2, 61:
-       PRINT X; OUT1; LCOUNT:
-       OUTCOUNT = OUTCOUNT + 1:
-       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
-       IF OUTCOUNT <> 10 THEN
-            PRINT #2, OUTPSTR + ","
-            X = X + 1
-            LCOUNT = 1
-            GOTO REP
-       ELSE
-            PRINT #2, OUTPSTR
-            X = X + 1
-            LCOUNT = 1
-            GOTO REP
-       END IF
-   PRINT #2, ""
-
-FORE:
-   
-   LCOUNT = 1
-   OUTCOUNT = 1
-   X = 1
-   PRINT #2, "999"; ","; "999"
-   PRINT #2, STR$(LINENUM); " DATA ";
-   
-FOREREP:
-
-   A$ = INKEY$: IF A$ <> "" THEN END
- 
-   IF OUTCOUNT = 11 THEN LINENUM = LINENUM + 1: PRINT #2, STR$(LINENUM); " DATA "; : OUTCOUNT = 1
- 
-   IF X = 960 THEN PRINT #2, STR$(OUT1); ","; STR$(LCOUNT); ","; : GOTO BACK:
-
-   OUT1 = FOUTFORE(X)
-   OUT2 = FOUTFORE(X + 1)
- 
-   IF OUT2 = OUT1 THEN LCOUNT = LCOUNT + 1: X = X + 1: GOTO FOREREP
-   IF OUT2 <> OUT1 THEN LOCATE 2, 61:
-       PRINT X; OUT1; LCOUNT:
-       OUTCOUNT = OUTCOUNT + 1:
-       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
-       IF OUTCOUNT <> 11 THEN
-            PRINT #2, OUTPSTR + ","
-            X = X + 1
-            LCOUNT = 1
-            GOTO FOREREP
-       ELSE
-            PRINT #2, OUTPSTR
-            X = X + 1
-            LCOUNT = 1
-            GOTO FOREREP
-       END IF
-   PRINT #2, ""
-BACK:
-   LINENUM = LINENUM + 1
-   LCOUNT = 1
-   OUTCOUNT = 1
-   X = 1
-   PRINT #2, "999"; ","; "999"
-   PRINT #2, STR$(LINENUM); " DATA ";
-  
-BACKREP:
-
-   A$ = INKEY$: IF A$ <> "" THEN END
-
-   IF OUTCOUNT = 11 THEN LINENUM = LINENUM + 1: PRINT #2, STR$(LINENUM); " DATA "; : OUTCOUNT = 1
-
-   IF X = 960 THEN PRINT #2, STR$(OUT1); ","; STR$(LCOUNT); ","; : GOTO CLEANUP:
-
-   OUT1 = FOUTBACK(X)
-   OUT2 = FOUTBACK(X + 1)
-
-   IF OUT2 = OUT1 THEN LCOUNT = LCOUNT + 1: X = X + 1: GOTO BACKREP
-   IF OUT2 <> OUT1 THEN LOCATE 2, 61:
-       PRINT X; OUT1; LCOUNT:
-       OUTCOUNT = OUTCOUNT + 1:
-       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
-       IF OUTCOUNT <> 11 THEN
-            PRINT #2, OUTPSTR + ","
-            X = X + 1
-            LCOUNT = 1
-            GOTO BACKREP
-       ELSE
-            PRINT #2, OUTPSTR
-            X = X + 1
-            LCOUNT = 1
-            GOTO BACKREP
-       END IF
-   
-
-CLEANUP:
-   PRINT #2, "999"; ","; "999"
-
+   write_aq_data(2, FOUTCHAR(), LINENUM, 9)
+   write_aq_data(2, FOUTFORE(), LINENUM, 10)
+   write_aq_data(2, FOUTBACK(), LINENUM, 10)
 
 CLOSE #1
 CLOSE #2

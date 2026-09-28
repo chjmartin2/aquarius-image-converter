@@ -1,35 +1,37 @@
-# v4.1.1 — Stable modern compiler compatible version
+# v4.1.1 - Stable modern compiler compatible version
 
-Released September 28, 2026. This is a new compatibility snapshot of the active V4.1 source, distinct from the historical `archive-v4.1` package.
+Released and updated September 28, 2026. The owner confirmed the corrected generated BASIC program runs successfully in Virtual Aquarius.
 
-## What is locked down
+**Download the ZIP again if you obtained v4.1.1 before this DATA-output correction.** The updated package is revision 3 in `BUILD-INFO.txt`. At the owner's explicit request, this fix updates the existing v4.1.1 release and tag rather than creating a new version.
 
-The exact BASIC source confirmed working by the owner is preserved without further conversion-algorithm changes during release preparation. It selects the FreeBASIC `deprecated` dialect, uses a `start_program` subroutine and explicit shared declarations, and includes the current dithering and custom-character choices. Build and launch scripts identify the exact source and executable paths.
+## Corrected BASIC output
 
-The release tag is `v4.1.1`. Future code fixes should receive a new version rather than replace this tag. On September 28, 2026, the owner requested a packaging refresh to add four test images to the existing v4.1.1 ZIP. Its BASIC source, executable and release tag remain unchanged; the ZIP and its checksums have been refreshed. Historical source snapshots, tags and original ZIPs are unchanged.
+The earlier build ended DATA lines after individual value/count pairs, leaving most of the data on unnumbered lines that Aquarius BASIC could not load correctly. The writer now assembles each complete numbered DATA statement before writing its newline.
 
-## Verified configuration
+The same fix keeps line numbers increasing across the character and color sections, handles the final run without reusing a previous value, and writes each section's `999,999` terminator on a numbered DATA line. The character-matching and dithering algorithms are unchanged.
 
-- Windows, 32-bit executable built with FreeBASIC 1.10.0 (2023-05-14), as bundled with WinFBE.
-- Command: `fbc32.exe BMP2AQV41.bas -s gui -x build\BMP2AQV41.exe`.
-- Successful compilation, desktop launch and visible BMP file picker; the owner confirmed the working source.
-- Warning 47 for the legacy `cs` symbol remains. It does not prevent this build from linking.
-- Other FreeBASIC versions and 64-bit compilation are not covered by this verification.
+## Verification
+
+- Fresh Windows executable built with FreeBASIC 1.10.0 (2023-05-14), Win32, using `-s gui` and the source's `deprecated` dialect.
+- Five automated regression cases compile the production writer with runtime checks, then independently decode its output and compare all 2,880 screen-data cells. Cases cover constant data, changing values, a different final cell, full-line boundaries and mixed data.
+- An Ariel conversion with Full Set and no dithering produces 127 numbered BASIC lines. Its character, foreground and background sections each decode to exactly 960 cells.
+- The owner ran the corrected output in Virtual Aquarius and reported that it worked perfectly on September 28, 2026.
+- The existing compiler warning 47 for the legacy `cs` symbol remains; it does not prevent linking.
 
 ## Download and run
 
-Download `Aquarius-Image-Converter-v4.1.1-win32.zip` from the GitHub release, extract all files into a writable folder, and run `run.cmd`. No compiler is required to run the packaged executable. Keep `customchar.txt` in the same folder. Use a working copy of a 320×192 BMP in a writable location; the `.AQ` output is written alongside the input.
+Download `Aquarius-Image-Converter-v4.1.1-win32.zip`, extract all files into a writable folder, and run `run.cmd`. No compiler is required to run the executable. Keep `customchar.txt` beside it. Select a 320x192 BMP; its `.AQ` output is written beside the input and may replace an existing listing of the same name.
 
-The ZIP includes the freshly compiled executable, the exact source, `customchar.txt`, build scripts, these notes, acknowledgements in the README, `BUILD-INFO.txt`, `SHA256SUMS.txt`, and four 320×192 test BMPs in `samples/`: `ariel.bmp`, `bart.bmp`, `sqtitle.bmp` (Space Quest), and `sonic3.bmp`. Ariel was specifically requested; the other three were randomly selected from suitable images in the owner's test collection. The samples retain their original bytes. No compiler distribution or historical executable is bundled. A separate SHA-256 file identifies the refreshed ZIP itself.
+The ZIP includes the corrected executable, matching `BMP2AQV41.bas` and `aq_output.bi`, `customchar.txt`, build scripts, regression tests, documentation, `BUILD-INFO.txt`, and `SHA256SUMS.txt`. A separate SHA-256 file identifies the ZIP itself.
 
-After extracting the ZIP, select a BMP from its `samples` folder in the converter's file picker. These are input examples, not claims that generated output has passed a regression test.
+Four original 320x192 test BMPs are included in `samples/`: `ariel.bmp`, `bart.bmp`, `sqtitle.bmp` (Space Quest), and `sonic3.bmp`. Ariel was specifically requested; the other three were randomly selected from suitable images in the owner's test collection. No compiler distribution or historical executable is bundled.
 
-To rebuild, run `build_converter.cmd` with the path to a compatible `fbc32.exe` if the default local WinFBE installation is absent. Close a running rebuilt converter before compiling to the same output path. `run_rebuilt_converter.cmd` builds and then launches the new executable.
+To rebuild, keep `aq_output.bi` beside the main source and run `build_converter.cmd`, supplying the path to a compatible `fbc32.exe` if necessary. Close any converter running from the build output path first. `run_rebuilt_converter.cmd` rebuilds and launches the program. With Python installed, `python tests/test_aq_output.py` runs the DATA-writer regressions; an optional compiler path is accepted.
 
-## Scope and inherited limitations
+## Release history and remaining scope
 
-“Stable” identifies the owner-selected working compiler compatibility baseline. It does not certify every conversion mode or generated Aquarius BASIC listing. No complete emulator or real-hardware regression test was performed for this release.
+The same v4.1.1 release was first published as a modern compiler compatibility snapshot, then refreshed to add four sample images. This third package revision replaces the faulty output writer with the emulator-confirmed fix. Its source tag now points to the corrected commit, and `BUILD-INFO.txt` records the matching commit and file hashes. Historical `archive-*` tags and original release ZIPs remain unchanged.
 
-Legacy input-error handling, pixel-array bounds and generated DATA-line formatting still need review. These behaviors are retained in this frozen source rather than silently changed while packaging it. Use working copies of input files; generated output may replace an existing listing of the same name.
+The emulator result confirms the owner's tested output. It is not a claim that every conversion mode has had a complete regression pass or that a new physical Aquarius test has been performed. Other compiler versions, 64-bit builds, legacy input-error handling and pixel-array bounds remain outside this fix.
 
-The original project announcement credits a GW-BASIC bitmap reader linked through VOGONS. Detailed historical attribution and redistribution terms remain under review; this release does not introduce a new license or claim new hardware validation.
+The original project announcement credits a GW-BASIC bitmap reader linked through VOGONS. Detailed historical attribution and redistribution terms remain under review; this release does not introduce a new license.

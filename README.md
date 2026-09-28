@@ -4,17 +4,20 @@ Static bitmap conversion for the original Mattel Aquarius. AQGraph, BMPAQ and th
 
 ## Stable modern compiler compatible version — v4.1.1
 
-[Download the Windows ZIP](https://github.com/chjmartin2/aquarius-image-converter/releases/download/v4.1.1/Aquarius-Image-Converter-v4.1.1-win32.zip) or read the [release notes](docs/RELEASE-v4.1.1.md). This September 28, 2026 release freezes the owner-confirmed working source and a fresh 32-bit Windows build using FreeBASIC 1.10.0. The `v4.1.1` tag identifies this modern compatibility snapshot; historical release tags and packages are unchanged.
+[Download the Windows ZIP](https://github.com/chjmartin2/aquarius-image-converter/releases/download/v4.1.1/Aquarius-Image-Converter-v4.1.1-win32.zip) or read the [release notes](docs/RELEASE-v4.1.1.md). This September 28, 2026 release contains the corrected BASIC DATA writer and a fresh 32-bit Windows build using FreeBASIC 1.10.0. The owner confirmed the corrected output runs successfully in Virtual Aquarius. At the owner's request, the existing `v4.1.1` release and tag were updated in place to include this fix; historical release tags and packages are unchanged.
+
+If you downloaded v4.1.1 before the DATA-line fix, download the ZIP again. The corrected package is revision 3 in `BUILD-INFO.txt`; it includes four 320×192 BMP inputs in `samples/`: Ariel, Bart, Space Quest and Sonic.
 
 Extract the whole ZIP into a writable folder and run `run.cmd`. Keep `customchar.txt` beside the executable. Select a 320×192 BMP from a writable working folder; the converter writes its `.AQ` listing beside that input. Close the converter before rebuilding, since Windows locks a running executable.
 
-Compiler compatibility and Windows operation are verified. Generated listings and all conversion modes have not had a complete emulator or hardware regression test; see the release notes for inherited limitations.
+Compiler compatibility, Windows operation and the owner's Virtual Aquarius output test are verified. Five automated DATA-writer regression cases also pass. A complete conversion-mode matrix and a fresh physical Aquarius test remain outside this validation; see the release notes for details.
 
 ## Working copy
 
 This is the master repository. BMP2AQV41.bas and customchar.txt were originally imported unchanged from the existing V4.1 folder on September 28, 2026. The active BASIC source now contains the modern compiler compatibility changes. The initial import and historical snapshots preserve the recovered source; this does not reconstruct a historical Git commit timeline.
 
 - BMP2AQV41.bas: active FreeBASIC source.
+- aq_output.bi: numbered BASIC DATA output writer; keep beside the main source when rebuilding.
 - customchar.txt: original custom character list.
 - history/: recovered BASIC source grouped by original location or package. Identical files retain their provenance.
 - samples/: selected Bugs and Ariel input bitmaps.
@@ -31,13 +34,15 @@ The V4.1 interface offers Full Set, 80×72 Blocks, Graphics Characters and Custo
 
 ## Building
 
-The v4.1.1 source was successfully compiled and launched on September 28, 2026 with WinFBE's bundled FreeBASIC 1.10.0 32-bit compiler and `-s gui`, and the owner confirmed the working source. Full conversion correctness has not yet been verified. The exact historical compiler version remains unknown.
+The corrected v4.1.1 source builds with WinFBE's bundled FreeBASIC 1.10.0 32-bit compiler and `-s gui`. The owner confirmed its generated output in Virtual Aquarius on September 28, 2026. The exact historical compiler version remains unknown.
 
 Run `build_converter.cmd` to compile the active `BMP2AQV41.bas` into `build\BMP2AQV41.exe`. The script prints the exact compiler, source and output paths. It defaults to the local compiler at `C:\WinFBE_Suite\toolchains\FreeBASIC-1.10.0-winlibs-gcc-9.3.0\fbc32.exe`; pass a different compiler path as its first argument if needed.
 
 Run `run_rebuilt_converter.cmd` to rebuild and launch that executable only if compilation succeeds. `run_converter.cmd` still launches the preserved historical executable in `bin`, not the rebuilt program. The historical binary is not replaced.
 
 The equivalent compiler invocation is `fbc32.exe BMP2AQV41.bas -s gui -x build\BMP2AQV41.exe` (create `build` first). The source selects the `deprecated` dialect. The tested compiler emits warning 47 for the legacy `cs` name but links successfully. Other compiler versions and 64-bit builds are not validated by this release.
+
+Run `python tests/test_aq_output.py` to compile the production DATA writer with runtime checks and verify five round-trip cases. An optional first argument selects another `fbc32.exe` path. Tests check line numbering, line endings, end-of-section markers and exact reconstruction of all 960 cells in each of the three screen-data sections.
 
 ## History and releases
 
