@@ -2,9 +2,17 @@
 
 Static bitmap conversion for the original Mattel Aquarius. AQGraph, BMPAQ and the V1–V4.1 iterations belong to this project. The later flicker converter is separate.
 
+## Stable modern compiler compatible version — v4.1.1
+
+[Download the Windows ZIP](https://github.com/chjmartin2/aquarius-image-converter/releases/download/v4.1.1/Aquarius-Image-Converter-v4.1.1-win32.zip) or read the [release notes](docs/RELEASE-v4.1.1.md). This September 28, 2026 release freezes the owner-confirmed working source and a fresh 32-bit Windows build using FreeBASIC 1.10.0. The `v4.1.1` tag identifies this modern compatibility snapshot; historical release tags and packages are unchanged.
+
+Extract the whole ZIP into a writable folder and run `run.cmd`. Keep `customchar.txt` beside the executable. Select a 320×192 BMP from a writable working folder; the converter writes its `.AQ` listing beside that input. Close the converter before rebuilding, since Windows locks a running executable.
+
+Compiler compatibility and Windows operation are verified. Generated listings and all conversion modes have not had a complete emulator or hardware regression test; see the release notes for inherited limitations.
+
 ## Working copy
 
-This is the new master repository. BMP2AQV41.bas and customchar.txt were copied from the existing V4.1 folder without changes. The source also matches the BASIC file in the preserved BMPAQV41.zip package. This import is dated September 28, 2026; it does not reconstruct a historical Git commit timeline.
+This is the master repository. BMP2AQV41.bas and customchar.txt were originally imported unchanged from the existing V4.1 folder on September 28, 2026. The active BASIC source now contains the modern compiler compatibility changes. The initial import and historical snapshots preserve the recovered source; this does not reconstruct a historical Git commit timeline.
 
 - BMP2AQV41.bas: active FreeBASIC source.
 - customchar.txt: original custom character list.
@@ -23,7 +31,13 @@ The V4.1 interface offers Full Set, 80×72 Blocks, Graphics Characters and Custo
 
 ## Building
 
-The source uses FreeBASIC, windows.bi and fbgfx.bi. The exact original compiler version and dialect/options have not yet been verified. No new build command or executable is presented as validated. The historical executable is preserved locally so toolchain restoration can proceed without replacing it.
+The v4.1.1 source was successfully compiled and launched on September 28, 2026 with WinFBE's bundled FreeBASIC 1.10.0 32-bit compiler and `-s gui`, and the owner confirmed the working source. Full conversion correctness has not yet been verified. The exact historical compiler version remains unknown.
+
+Run `build_converter.cmd` to compile the active `BMP2AQV41.bas` into `build\BMP2AQV41.exe`. The script prints the exact compiler, source and output paths. It defaults to the local compiler at `C:\WinFBE_Suite\toolchains\FreeBASIC-1.10.0-winlibs-gcc-9.3.0\fbc32.exe`; pass a different compiler path as its first argument if needed.
+
+Run `run_rebuilt_converter.cmd` to rebuild and launch that executable only if compilation succeeds. `run_converter.cmd` still launches the preserved historical executable in `bin`, not the rebuilt program. The historical binary is not replaced.
+
+The equivalent compiler invocation is `fbc32.exe BMP2AQV41.bas -s gui -x build\BMP2AQV41.exe` (create `build` first). The source selects the `deprecated` dialect. The tested compiler emits warning 47 for the legacy `cs` name but links successfully. Other compiler versions and 64-bit builds are not validated by this release.
 
 ## History and releases
 

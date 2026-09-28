@@ -9,7 +9,7 @@ Import/recovery date: September 28, 2026. GitHub releases are archival republica
 | V2 | BMPAQV2.zip has binary and README; local BMPAQ2/OldV has V2 source | Source-to-binary match not yet established |
 | V3 | BMPAQV3.zip has binary and README; BMPAQ2/BMP2AQV3.zip contains source | Both packages recovered; build correspondence not yet verified |
 | V4 | BMPAQV4/BMPAQV4.zip contains V4 and V4.1 binaries and source | Both source names have identical bytes, while the binaries differ |
-| V4.1 | BMPAQV4/BMPAQV41.zip contains source, binary and custom character list | Active source exactly matches this package; latest identified local candidate |
+| V4.1 | BMPAQV4/BMPAQV41.zip contains source, binary and custom character list | Initial imported source matched this package; active source now has modern compiler compatibility changes |
 
 Historical BASIC files extracted from ZIPs are under history/packages. The eight original ZIPs are attached unchanged to six public archival releases. Local preservation copies remain in ../Releases/Original-Packages (relative to the repository root). The entry-by-entry catalog in ../Notes/release-catalog.json remains private because it contains local paths.
 
@@ -17,4 +17,6 @@ Before a GitHub release: establish the correct source and binary pair, retain ac
 
 ## Public archive tags
 
-The tags archive-aqgraph, archive-v1, archive-v2, archive-v3, archive-v4 and archive-v4.1 mark the present-day recovered source collection. They do not pretend to be original historical development commits. GitHub-generated Source code archives contain that recovered collection, not a version-specific historical tree. Use the explicitly attached original ZIPs for the corresponding historical release. No fresh compilation or complete hardware regression is claimed.
+The tags archive-aqgraph, archive-v1, archive-v2, archive-v3, archive-v4 and archive-v4.1 mark the present-day recovered source collection. They do not pretend to be original historical development commits. GitHub-generated Source code archives contain that recovered collection, not a version-specific historical tree. Use the explicitly attached original ZIPs for the corresponding historical release. Those archival releases claim no fresh compilation or complete hardware regression.
+
+The separate `v4.1.1` release freezes the active modern compiler compatible source and a new FreeBASIC 1.10.0 Win32 build. See [its release notes](RELEASE-v4.1.1.md). It does not replace or relabel the original V4.1 package.

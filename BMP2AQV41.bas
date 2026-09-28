@@ -1,8 +1,10 @@
+#lang "deprecated"
 #define WIN_INCLUDEALL
 
 #include once "windows.bi"
 #include "fbgfx.bi"
 
+DECLARE SUB start_program()
 
 function file_getname( byval hWnd as HWND ) as string
 
@@ -42,13 +44,17 @@ function file_getname( byval hWnd as HWND ) as string
 
 end Function
 
-DIM image(320, 192), apal(15,3), imz(320,192,3), charo(8, 8), COLL(16), codis(16, 16), outbmp(320, 192), outcol(40, 24, 2), outchar(40, 24), collok(16), FOUTCHAR(960), FOUTFORE(960), FOUTBACK(960)
-DIM imgload(320*192) AS Integer, charmap(255,7,7), matches(511), imagein(319,191,3), imout(319,191)
-Dim ret As String, graphchar(255)
+DIM SHARED image(320, 192) AS INTEGER, apal(15, 3) AS INTEGER, imz(320, 192, 3) AS INTEGER, charo(8, 8) AS INTEGER, COLL(16) AS INTEGER, codis(16, 16) AS INTEGER, outbmp(320, 192) AS INTEGER, outcol(40, 24, 2) AS INTEGER, outchar(40, 24) AS INTEGER, collok(16) AS INTEGER, FOUTCHAR(960) AS INTEGER, FOUTFORE(960) AS INTEGER, FOUTBACK(960) AS INTEGER
+DIM SHARED imgload(320 * 192) AS INTEGER, charmap(255, 7, 7) AS INTEGER, matches(511) AS INTEGER, imagein(319, 191, 3) AS INTEGER, imout(319, 191) AS INTEGER
+DIM SHARED ret AS STRING
+DIM SHARED graphchar(255) AS INTEGER
+DIM SHARED OUTPSTR AS STRING
+DIM SHARED filename$, SAVENAME$, cs$, dt$, A$, head$, lbh$, lin$
+DIM SHARED lbj AS INTEGER, yostop AS INTEGER, dither AS INTEGER, OUT1 AS INTEGER, OUT2 AS INTEGER, LCOUNT AS INTEGER, OUTCOUNT AS INTEGER, LINENUM AS INTEGER, countme AS INTEGER, x AS INTEGER, y AS INTEGER, i AS INTEGER, j AS INTEGER, row AS INTEGER, MAXI AS INTEGER, SEC AS INTEGER, S AS INTEGER, V AS INTEGER, F AS INTEGER, o AS INTEGER, d AS INTEGER, mmatch AS INTEGER, temp AS INTEGER, outtem AS INTEGER, b AS INTEGER, ipos AS INTEGER, xpos AS INTEGER, ypos AS INTEGER, xsizebmp AS INTEGER, ysizebmp AS INTEGER, rdist AS SINGLE, gdist AS SINGLE, bdist AS SINGLE, c AS INTEGER, count AS INTEGER, xx AS INTEGER, yy AS INTEGER, fcount AS INTEGER, hcount AS INTEGER, code AS INTEGER, TOGGLE AS INTEGER
 
 Screenres 700,500,32: CLS
 LOCATE 1, 1
-FILENAME$ = "-"
+filename$ = "-"
 TOGGLE = 0
 
 filename$=file_getname(NULL)
@@ -106,7 +112,7 @@ wend
 
 
 
-gosub start
+CALL start_program()
 
 END: REM -- end of program
 
@@ -115,53 +121,111 @@ REM ---- load .BMP file subroutine ----
 REM -----------------------------------
 REM known bug: image not loaded properly when (XSIZEBMP MOD 4) <> 0
 
-START:
+SUB start_program()
 
 B = 0
 IPOS = 0
-OPEN "I", 1, FILENAME$
+OPEN "I", 1, filename$
 OPEN "O", 2, SAVENAME$
 FOR i = 0 TO 117
    B = ASC(INPUT$(1, #1))
-   IF (IPOS = 0) AND (B <> 66) THEN GOTO NOTBMP: REM no header "B"
-   IF (IPOS = 1) AND (B <> 77) THEN GOTO NOTBMP: REM no header "M"
+   IF (IPOS = 0) AND (B <> 66) THEN GOTO bad_header
+   IF (IPOS = 1) AND (B <> 77) THEN GOTO bad_header
    IF (IPOS = 18) THEN XSIZEBMP = B
    IF (IPOS = 19) THEN XSIZEBMP = XSIZEBMP + (B * 256)
    IF (IPOS = 22) THEN YSIZEBMP = B
    IF (IPOS = 23) THEN YSIZEBMP = YSIZEBMP + (B * 256)
-   'IF (IPOS = 28) AND (B <> 4) THEN GOTO NOT16: REM not 4 bits, 16 color
+   'IF (IPOS = 28) AND (B <> 4) THEN CALL not_16(): REM not 4 bits, 16 color
    IPOS = IPOS + 1
 NEXT i
-IF (XSIZEBMP <> 320 OR YSIZEBMP <> 192) THEN GOTO NOT8072: REM not right size
+IF (XSIZEBMP <> 320 OR YSIZEBMP <> 192) THEN GOTO bad_size
+GOTO bmp_ok
+
+bad_header:
+   PRINT "Not a bitmap file, error reading header, "; filename$
+   GOTO done_header
+
+bad_size:
+   PRINT "BMP Must be 80 x 72"
+   GOTO done_header
+
+bmp_ok:
 REM ---- pixels in .BMP are stored from bottom left to top right ----
+
+done_header:
 xpos = 0
 YPOS = YSIZEBMP - 1
 LOCATE 2, 42: PRINT "Conversion in Process..."
-LOCATE 3, 42: PRINT "Filename: "; right$(FILENAME$,8)
+LOCATE 3, 42: PRINT "Filename: "; right$(filename$,8)
 LOCATE 4, 42: PRINT "Output: "; right$(SAVENAME$,8)
 bload filename$,@imgload(0)
 put (0,1),imgload(0)
+locate 38,1:
+
+print "Dither? (Y/N):"
+asker:
+dt$=inkey$:if dt$<>"Y" and dt$<>"y" and dt$<>"N" and dt$<>"n" then goto asker
+print dt$
+if dt$="y" or dt$="Y" then dither=1
+
 
 locate 40,1:
 print "A) Full Set"
 print "B) 80x72 Blocks"
 print "C) Graphics Characters"
+print "D) Custom Character Set (customchar.txt)"
 print "Choose Character Set:";
 asking:
-cs$=inkey$:if cs$<>"A" and cs$<>"a" and cs$<>"B" and cs$<>"b" and cs$<>"C" and cs$<>"c" then goto asking:
+cs$=inkey$:if cs$<>"A" and cs$<>"a" and cs$<>"B" and cs$<>"b" and cs$<>"C" and cs$<>"c" and cs$<>"D" and cs$<>"d" then goto asking:
 print cs$
 
+if cs$ = "D" or cs$="d" then
+
+for h=0 to 255
+    graphchar(h)=0
+next h
+
+open "I",#3,"customchar.txt"
+
+countme=0
+yostop=0
+input #3,head$
+while yostop<>999
+    countme=countme+1
+    input #3,lbh$
+    lbj=val(lbh$)
+    if lbj<>999 then graphchar(lbj)=lbj
+    if lbj=999 then yostop=999
+    'locate 50,1:print "lbj:";lbh$;lbj
+    'input fd$
+wend
+
+close #3
+
+end if
 
 for y=1 to 192
-    
     for x=1 to 320
-      locate 1,50
       imagein(x,y,3)=imgload((y-1)*320+x) And 255
       imagein(x,y,2)=(imgload((y-1)*320+x) and 65280)\256
       imagein(x,y,1)=(imgload((y-1)*320+x) and 16711680)\65536
+      'locate 50,1
       'print imgload(y*320+x+1);" ";imagein(x,y,1);" ";imagein(x,y,2);" ";imagein(x,y,3);"               "
       'locate 2,50:print "ORIGS: ";rgb(imagein(x,y,1),imagein(x,y,2),imagein(x,y,3));"               "
       'input f$
+    next x
+next y
+
+
+
+
+for y=1 to 192
+    for x=1 to 320
+      for c=1 to 3
+          if imagein(x,y,c)>=255 then imagein(x,y,c)=255
+          if imagein(x,y,c)<=0 then imagein(x,y,c)=0
+      next c
+      
       miner=500
       minc=99
       for j=0 to 15
@@ -182,6 +246,39 @@ for y=1 to 192
       'pset(x,y+200),rgb(apal(image(x,y),1),apal(image(x,y),2),apal(image(x,y),3))
       'pset(x,y+200),imagein(x,y,1)+256*imagein(x,y,2)+65536*imagein(x,y,3)
       'locate 9,50:PRINT "OUTRGB - R: ";apal(image(x,y),1);" G: ";apal(image(x,y),2);" B: ";apal(image(x,y),3)
+        
+       rdist=imagein(x,y,1)-apal(minc,1)  ' calculate error in R dimension
+       gdist=imagein(x,y,2)-apal(minc,2)  ' calculate error in G dimension
+       bdist=imagein(x,y,3)-apal(minc,3)  ' calculate error in B dimension
+
+
+if dither=1 then
+    
+        if x<320 then
+            imagein(x+1,y,1)=imagein(x+1,y,1)+(7/16)*rdist
+            imagein(x+1,y,2)=imagein(x+1,y,2)+(7/16)*gdist
+            imagein(x+1,y,3)=imagein(x+1,y,3)+(7/16)*bdist            
+        end if
+        
+        if x<320 and y<192 then
+            imagein(x+1,y+1,1)=imagein(x+1,y+1,1)+(1/16)*rdist
+            imagein(x+1,y+1,2)=imagein(x+1,y+1,2)+(1/16)*gdist
+            imagein(x+1,y+1,3)=imagein(x+1,y+1,3)+(1/16)*bdist
+        end if
+        
+        if y<192 then
+            imagein(x,y+1,1)=imagein(x,y+1,1)+(5/16)*rdist
+            imagein(x,y+1,2)=imagein(x,y+1,2)+(5/16)*gdist
+            imagein(x,y+1,3)=imagein(x,y+1,3)+(5/16)*bdist
+        end if
+        
+        if x>1 and y<192 then
+            imagein(x-1,y+1,1)=imagein(x-1,y+1,1)+(3/16)*rdist
+            imagein(x-1,y+1,2)=imagein(x-1,y+1,2)+(3/16)*gdist
+            imagein(x-1,y+1,3)=imagein(x-1,y+1,3)+(3/16)*bdist            
+        end if
+end if
+
     next x
 next y
 
@@ -267,11 +364,6 @@ next y
 
 
 
-if cs$ = "C" or cs$="c" then
-    
-end if
-     
-     
        for d=0 to 255
          for g=0 to 7
            for h=0 to 7
@@ -287,7 +379,7 @@ end if
         end if
        next d
 
-if cs$="C" or cs$="c" then 
+if cs$="C" or cs$="c" or cs$="D" or cs$="d" then 
        for d=0 to 255
           if graphchar(d)=0 then
             matches(d)=0
@@ -381,14 +473,14 @@ REP:
    IF OUT2 <> OUT1 THEN LOCATE 2, 61:
        PRINT X; OUT1; LCOUNT:
        OUTCOUNT = OUTCOUNT + 1:
-       OUTP$ = STR$(OUT1) + "," + STR$(LCOUNT):
+       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
        IF OUTCOUNT <> 10 THEN
-            PRINT #2, OUTP$; ",";
+            PRINT #2, OUTPSTR + ","
             X = X + 1
             LCOUNT = 1
             GOTO REP
        ELSE
-            PRINT #2, OUTP$
+            PRINT #2, OUTPSTR
             X = X + 1
             LCOUNT = 1
             GOTO REP
@@ -418,14 +510,14 @@ FOREREP:
    IF OUT2 <> OUT1 THEN LOCATE 2, 61:
        PRINT X; OUT1; LCOUNT:
        OUTCOUNT = OUTCOUNT + 1:
-       OUTP$ = STR$(OUT1) + "," + STR$(LCOUNT):
+       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
        IF OUTCOUNT <> 11 THEN
-            PRINT #2, OUTP$; ",";
+            PRINT #2, OUTPSTR + ","
             X = X + 1
             LCOUNT = 1
             GOTO FOREREP
        ELSE
-            PRINT #2, OUTP$
+            PRINT #2, OUTPSTR
             X = X + 1
             LCOUNT = 1
             GOTO FOREREP
@@ -454,14 +546,14 @@ BACKREP:
    IF OUT2 <> OUT1 THEN LOCATE 2, 61:
        PRINT X; OUT1; LCOUNT:
        OUTCOUNT = OUTCOUNT + 1:
-       OUTP$ = STR$(OUT1) + "," + STR$(LCOUNT):
+       OUTPSTR = STR$(OUT1) + "," + STR$(LCOUNT)
        IF OUTCOUNT <> 11 THEN
-            PRINT #2, OUTP$; ",";
+            PRINT #2, OUTPSTR + ","
             X = X + 1
             LCOUNT = 1
             GOTO BACKREP
        ELSE
-            PRINT #2, OUTP$
+            PRINT #2, OUTPSTR
             X = X + 1
             LCOUNT = 1
             GOTO BACKREP
@@ -476,41 +568,24 @@ CLOSE #1
 CLOSE #2
 locate 28,24:print "DONE! Press a key to exit."
 input f$
-RETURN
+END SUB
 
-560 REM -------------------------------
-570 REM --- DRAW & WRITE SUBROUTINE ---
-580 REM -------------------------------
-590 PSET (xpos, YPOS), PIXEL
+SUB draw_and_write()
+    DIM PIXEL AS INTEGER
+    PSET (xpos, YPOS), PIXEL
     IF YPOS > -1 THEN image(xpos + 1, YPOS + 1) = PIXEL
-600 xpos = xpos + 1: IF xpos = 320 THEN xpos = 0
-610 IF (xpos = 0) THEN YPOS = YPOS - 1
-620 RETURN
+    xpos = xpos + 1: IF xpos = 320 THEN xpos = 0
+    IF (xpos = 0) THEN YPOS = YPOS - 1
+END SUB
 
-630 REM ------------------------------------
-640 REM -- wait for keypress subroutine ----
-650 REM ------------------------------------
-660 WAITKEY$ = ""
-670 WHILE (WAITKEY$ = "")
-680   WAITKEY$ = INKEY$
-690 WEND
-700 RETURN
-
-REM -----------------
-REM ---- errors  ----
-REM -----------------
-
-NOTBMP:
-  PRINT "Not a bitmap file, error reading header, "; FILENAME$
-END
-
-NOT16:
-  PRINT "Not a 16 color bitmap file, "; FILENAME$; ", expected 4 found "; B
-END
-
-NOT8072:
-  PRINT "BMP Must be 80 x 72"
-END
+FUNCTION wait_for_key() AS STRING
+    DIM local_waitkey AS STRING
+    local_waitkey = ""
+    WHILE (local_waitkey = "")
+       local_waitkey = INKEY$
+    WEND
+    wait_for_key = local_waitkey
+END FUNCTION
 
 REM Color Distance Lookup Table:  16x16 Array
 
