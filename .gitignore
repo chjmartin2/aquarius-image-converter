@@ -1,0 +1,14 @@
+# Local original executable and new builds
+/bin/
+/build/
+*.obj
+*.o
+# Generated results alongside local input samples
+/samples/*.AQ
+/samples/*.aq
+/samples/*.TXT
+/samples/*.txt
+/output/
+# Temporary editor state
+*.bak
+*.tmp

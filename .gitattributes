@@ -1,0 +1,7 @@
+* text=auto
+*.bas -text
+*.BAS -text
+*.bi -text
+*.bmp binary
+*.png binary
+*.jpg binary

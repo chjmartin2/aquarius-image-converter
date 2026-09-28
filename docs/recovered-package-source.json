@@ -1,0 +1,86 @@
+[
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/ASH.AQ.BAS",
+    "sha256": "07cbeda59e7f6d12f8b940f5af3985239771c8baee2b2e5368953af9b9f73865"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/BRIT.AQ.BAS",
+    "sha256": "bdeb6dad229c95c7adb1e7b76f4fd0b06da582a6ab73a9e1d4595a8ab7cbdaff"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/C64.AQ.BAS",
+    "sha256": "51e98b03e6718861fa81944fdfc3af753c8ef043d2fc217dd220825a6068847d"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/CARTMAN.AQ.BAS",
+    "sha256": "2899d431f477694656d0682c70a67067ec461425538ec8c6d1777ed07a9e4232"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/COSUCK.AQ.BAS",
+    "sha256": "9334a218786a2c733faaa9519ff4d5b94c71ff36c5e7c96e70c36487bd72e1cc"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/HOMER.AQ.BAS",
+    "sha256": "57324d5848ee84305cee46c5f08a2d3c5adf303ea6cc8698e6e7e8c47f1cf7b0"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/JENASS.AQ.BAS",
+    "sha256": "23d2ecaaf34bee8955b16f5d51ec9b886d348a6332c65310e43ba32e21d5bab7"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/JERRY.AQ.BAS",
+    "sha256": "eb8f768c0ab57d1fc9277b58cf9920e05260fc229ebe2eff4dd3415bb6ea409c"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/JESRAB.AQ.BAS",
+    "sha256": "716ca2066f39af9714114f86868a5838f57c69f3c6f183bcc7c478ec774c7d63"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/MATT.AQ.BAS",
+    "sha256": "9184337ab948f52d4ae1aea314ced15513cab54637e284cf2f69b5b3cef7dfc4"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/MICKEY.AQ.BAS",
+    "sha256": "1b16c1d1ccd71aae0609d00fc556bbfac742f978f8bf510fdaad2c7c519cef03"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/PAPA.AQ.BAS",
+    "sha256": "61fe72467f5e47e14f948784321f6b4d790b811842ad09ce32d78ba35dfa77f1"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/PATS.AQ.BAS",
+    "sha256": "04e92cbb752d1687a7b6f73903b0a19f9f200e7d8a519d9d309333724225dfa1"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/AqBasic/POPEYE.AQ.BAS",
+    "sha256": "b673c1fae44c6371c830a2b3ae544aede0e26b55af47a76aa0767da56dca2dfe"
+  },
+  {
+    "path": "history/packages/AQGraph/AQGraph/RESOURCE/AQBMP.BAS",
+    "sha256": "51738becbb8e9e5258e922029c07136e1dede2f3d12f13eafd06c1cbce659b5a"
+  },
+  {
+    "path": "history/packages/BMPAQ2__BMP2AQV3/BMP2AQV3.bas",
+    "sha256": "e48b0d78c6319de445e48491d3d4ca8a23450a7700f9b150a5b6e8d7748c9378"
+  },
+  {
+    "path": "history/packages/BMPAQV1/BMPAQV1/BMP2AQV1.bas",
+    "sha256": "77b21bedb301ed6ec73b1c89f9ccecd13eafd5b0f5984a06fd06a951c8e986b7"
+  },
+  {
+    "path": "history/packages/BMPAQV4__BMPAQV4/BMP2AQV4.bas",
+    "sha256": "fc4c450a68a81007e7e9cae86e309049e4d510a35255cb97df0176f0f969f3c7"
+  },
+  {
+    "path": "history/packages/BMPAQV4__BMPAQV4/BMP2AQV41.bas",
+    "sha256": "fc4c450a68a81007e7e9cae86e309049e4d510a35255cb97df0176f0f969f3c7"
+  },
+  {
+    "path": "history/packages/BMPAQV4__BMPAQV41/BMP2AQV41.bas",
+    "sha256": "fc4c450a68a81007e7e9cae86e309049e4d510a35255cb97df0176f0f969f3c7"
+  },
+  {
+    "path": "history/packages/BMPAQ__BMP2AQV1/BMP2AQV1.bas",
+    "sha256": "77b21bedb301ed6ec73b1c89f9ccecd13eafd5b0f5984a06fd06a951c8e986b7"
+  }
+]
