@@ -15,7 +15,9 @@ This is the new master repository. BMP2AQV41.bas and customchar.txt were copied 
 
 ## Run the preserved Windows converter
 
-Open run_converter.cmd in this local checkout. It starts the preserved executable from bin with this repository as its working directory. Choose a 320×192 BMP, choose dithering and a character set, and wait for the completion message. Output is an .AQ BASIC listing next to the selected input file, so use the samples here or a working copy rather than an original archive image.
+For an original downloadable program, use an attached ZIP from the [releases page](https://github.com/chjmartin2/aquarius-image-converter/releases), rather than GitHub’s automatically generated source archives. V4.1 includes BMP2AQV41.exe and customchar.txt. Extract the ZIP into a working folder and run its executable.
+
+In the owner’s local master checkout, open run_converter.cmd. It starts the preserved executable from bin with this repository as its working directory. Choose a 320×192 BMP, choose dithering and a character set, and wait for the completion message. Output is an .AQ BASIC listing next to the selected input file, so use the samples here or a working copy rather than an original archive image.
 
 The V4.1 interface offers Full Set, 80×72 Blocks, Graphics Characters and Custom Character Set. A September 28, 2026 screenshot shows a completed Bugs conversion. This is evidence of a run of the preserved binary, not proof that this source has been rebuilt or that all output options have been tested on hardware.
 
@@ -27,7 +29,7 @@ The source uses FreeBASIC, windows.bi and fbgfx.bi. The exact original compiler 
 
 The original announcement is [Aquarius Bitmap Graphics Tool on AtariAge](https://forums.atariage.com/topic/173033-aquarius-bitmap-graphics-tool/#comment-2145562). The start remains approximately November 2010. V4.1 is the latest identified local release candidate, with a January 23, 2011 package timestamp; that alone is not a verified publication date.
 
-Read docs/RELEASE-RECOVERY.md before constructing historical GitHub releases. No GitHub remote or historical release has been created for this repository.
+Read docs/RELEASE-RECOVERY.md before constructing historical GitHub releases. The public repository is [chjmartin2/aquarius-image-converter](https://github.com/chjmartin2/aquarius-image-converter). The [archival releases](https://github.com/chjmartin2/aquarius-image-converter/releases) preserve the original ZIP downloads, with V4.1 selected as the latest historical package.
 
 ## Credits and archive
 

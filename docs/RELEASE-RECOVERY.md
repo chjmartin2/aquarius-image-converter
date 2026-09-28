@@ -1,6 +1,6 @@
 # Historical release recovery
 
-Import/recovery date: September 28, 2026. No backdated Git commits or public releases have been made.
+Import/recovery date: September 28, 2026. GitHub releases are archival republications of the owner-approved original ZIPs. No Git commits or publication timestamps are backdated.
 
 | Collection | Preserved package/source evidence | State |
 | --- | --- | --- |
@@ -11,6 +11,10 @@ Import/recovery date: September 28, 2026. No backdated Git commits or public rel
 | V4 | BMPAQV4/BMPAQV4.zip contains V4 and V4.1 binaries and source | Both source names have identical bytes, while the binaries differ |
 | V4.1 | BMPAQV4/BMPAQV41.zip contains source, binary and custom character list | Active source exactly matches this package; latest identified local candidate |
 
-Historical BASIC files extracted from ZIPs are under history/packages. Full unmodified ZIPs remain private in ../Releases/Original-Packages (relative to the repository root), and a private entry-by-entry SHA-256 catalog is in ../Notes/release-catalog.json. It includes original paths; do not publish it unchanged.
+Historical BASIC files extracted from ZIPs are under history/packages. The eight original ZIPs are attached unchanged to six public archival releases. Local preservation copies remain in ../Releases/Original-Packages (relative to the repository root). The entry-by-entry catalog in ../Notes/release-catalog.json remains private because it contains local paths.
 
 Before a GitHub release: establish the correct source and binary pair, retain acknowledgements, review the contents of the original ZIP, choose appropriate downloadable files, and verify any claimed historical release date against the original announcement. Release creation happens now; notes can separately identify an evidence-supported original date. Do not infer a release from a folder name or silently count duplicate source copies as new versions. Do not attach whole legacy folders or unreviewed original packages automatically.
+
+## Public archive tags
+
+The tags archive-aqgraph, archive-v1, archive-v2, archive-v3, archive-v4 and archive-v4.1 mark the present-day recovered source collection. They do not pretend to be original historical development commits. GitHub-generated Source code archives contain that recovered collection, not a version-specific historical tree. Use the explicitly attached original ZIPs for the corresponding historical release. No fresh compilation or complete hardware regression is claimed.
