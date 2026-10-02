@@ -1,0 +1,29 @@
+Aquarius Image Converter - Demo Output
+Owner test results recorded October 2, 2026
+
+16 PASS; 3 FAIL in the original checklist.
+17 AQ files are present here: 16 passed plus ninjag_AQ.TXT, retained for troubleshooting.
+kq6_AQ.TXT and the old 80x72 Popeye output were already absent before flattening.
+No files have been committed or published as part of this organization.
+
+Owner results (filenames now relative to Demo Output):
+
+[PASS] jesrab_AQ.TXT
+[PASS] popeye_AQ.TXT
+[PASS] earing_AQ.TXT
+[PASS] PATS_AQ.TXT
+[PASS] ariel_AQ.TXT
+[PASS] dietcok_AQ.TXT
+[PASS] homcol_AQ.TXT
+[FAIL] 320x192/Games/kq6_AQ.TXT (already absent; not included)
+[PASS] kquest_AQ.TXT
+[PASS] NinjaGaOp_AQ.TXT
+[PASS] Portal2_AQ.TXT
+[PASS] lion29_AQ.TXT
+[PASS] jennc_AQ.TXT
+[FAIL] ninjag_AQ.TXT
+[PASS] rooster_AQ.TXT
+[PASS] wave_AQ.TXT
+[PASS] ghost_AQ.TXT
+[PASS] hobbit_AQ.TXT
+[FAIL IGNORE] 80x72/Cartoons/popeye_AQ.TXT (already absent; not included)
